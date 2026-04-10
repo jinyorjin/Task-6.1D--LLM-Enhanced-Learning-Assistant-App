@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="#E0F7FA"> <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Your Interests"
+        android:textSize="28sp"
+        android:textColor="@android:color/black"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="You may select a topic to personalize your tasks"
+        android:textSize="16sp" />
+
+    <EditText
+        android:id="@+id/etName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:hint="Username"
+        android:background="@android:color/white"
+        android:padding="12dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Choose a topic:"
+        android:textStyle="bold"
+        android:textColor="@android:color/black" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="12dp">
+        <Button android:id="@+id/btnAlgo" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Algorithms" android:layout_margin="4dp" style="?android:attr/buttonStyleSmall" android:backgroundTint="#673AB7" android:textColor="@android:color/white"/>
+        <Button android:id="@+id/btnDataStruct" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Data Structures" android:layout_margin="4dp" style="?android:attr/buttonStyleSmall" android:backgroundTint="#673AB7" android:textColor="@android:color/white"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button android:id="@+id/btnWebDev" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Web Development" android:layout_margin="4dp" style="?android:attr/buttonStyleSmall" android:backgroundTint="#673AB7" android:textColor="@android:color/white"/>
+        <Button android:id="@+id/btnTesting" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Testing" android:layout_margin="4dp" style="?android:attr/buttonStyleSmall" android:backgroundTint="#673AB7" android:textColor="@android:color/white"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button android:id="@+id/btnMobileDev" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Mobile Development" android:layout_margin="4dp" style="?android:attr/buttonStyleSmall" android:backgroundTint="#673AB7" android:textColor="@android:color/white"/>
+        <Button android:id="@+id/btnDatabase" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Database" android:layout_margin="4dp" style="?android:attr/buttonStyleSmall" android:backgroundTint="#673AB7" android:textColor="@android:color/white"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button android:id="@+id/btnSecurity" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Cybersecurity" android:layout_margin="4dp" style="?android:attr/buttonStyleSmall" android:backgroundTint="#673AB7" android:textColor="@android:color/white"/>
+        <Button android:id="@+id/btnAI" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Artificial Intelligence" android:layout_margin="4dp" style="?android:attr/buttonStyleSmall" android:backgroundTint="#673AB7" android:textColor="@android:color/white"/>
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/etHours"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:hint="Study hours per week"
+        android:inputType="number"
+        android:background="@android:color/white"
+        android:padding="12dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <Button
+        android:id="@+id/btnSaveProfile"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="#00E676"
+        android:text="Next"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:textSize="18sp" />
+
+</LinearLayout>
+</ScrollView>
