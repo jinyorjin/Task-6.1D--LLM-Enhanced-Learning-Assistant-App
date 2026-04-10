@@ -1,3 +1,4 @@
+<img width="383" height="600" alt="image" src="https://github.com/user-attachments/assets/99cc6bf7-5876-416c-afa8-ad196bc8e9bb" />
 README
 LLM-Enhanced Learning Assistant App
 
