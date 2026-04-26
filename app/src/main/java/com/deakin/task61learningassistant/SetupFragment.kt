@@ -55,8 +55,25 @@ class SetupFragment : Fragment() {
 
         // If a name was passed from previous screen, fill it automatically
         val passedName = arguments?.getString("userName")
-        if (!passedName.isNullOrEmpty()) {
-            etName.setText(passedName)
+        val username = requireContext()
+            .getSharedPreferences("user_profile", Context.MODE_PRIVATE)
+            .getString("username", "")
+            ?.trim()
+            .orEmpty()
+        val savedName = requireContext()
+            .getSharedPreferences("user_profile", Context.MODE_PRIVATE)
+            .getString("name_$username", "")
+
+        when {
+            !savedName.isNullOrEmpty() -> {
+                etName.setText(savedName)
+                etName.isEnabled = false
+            }
+            username.isNotEmpty() -> {
+                etName.setText(username)
+                etName.isEnabled = false
+            }
+            !passedName.isNullOrEmpty() -> etName.setText(passedName)
         }
 
         // 3. Handle Save & Next button
@@ -74,9 +91,9 @@ class SetupFragment : Fragment() {
             // Save user profile using SharedPreferences
             val prefs = requireActivity().getSharedPreferences("user_profile", Context.MODE_PRIVATE)
             prefs.edit().apply {
-                putString("name", name)
-                putString("interest", selectedInterest)
-                putString("hours", hours)
+                putString("name_$username", name)
+                putString("interest_$username", selectedInterest)
+                putString("hours_$username", hours)
             }.apply()
 
             // Navigate to HomeFragment (dashboard screen)

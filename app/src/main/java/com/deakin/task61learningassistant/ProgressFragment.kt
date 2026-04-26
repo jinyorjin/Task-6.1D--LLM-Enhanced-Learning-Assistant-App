@@ -31,9 +31,11 @@ class ProgressFragment : Fragment() {
 
         val pbLoading = view.findViewById<ProgressBar>(R.id.pbLoadingPlan)
         val btnBack = view.findViewById<Button>(R.id.btnBackHome)
+        val historyStorage = HistoryStorage(requireContext())
 
         val prefs = requireActivity().getSharedPreferences("user_profile", Context.MODE_PRIVATE)
-        val interest = prefs.getString("interest", "General") ?: "General"
+        val username = prefs.getString("username", "")?.trim().orEmpty()
+        val interest = prefs.getString("interest_$username", "General") ?: "General"
 
         // AI에게 데이터를 3개의 파트로 나눠달라고 요청 (카드 디자인을 위해)
         val planPrompt = "Suggest a 7-day study plan for $interest. Provide it in 3 clear parts (Days 1-2, Days 3-5, Days 6-7). Keep each part very short."
@@ -47,11 +49,14 @@ class ProgressFragment : Fragment() {
             tvPlan1.text = parts.getOrNull(0) ?: "Days 1-2: Start with basics"
             tvPlan2.text = parts.getOrNull(1) ?: "Days 3-5: Deep dive into $interest"
             tvPlan3.text = parts.getOrNull(2) ?: "Days 6-7: Practice and review"
+            historyStorage.saveHistory(HistoryItem(planPrompt, result, "Study Plan"))
         }, {
             pbLoading.visibility = View.GONE
             tvPlan1.text = "Days 1-2: Basics of $interest"
             tvPlan2.text = "Days 3-5: Practical Implementation"
             tvPlan3.text = "Days 6-7: Final Projects & Review"
+            val fallback = "${tvPlan1.text}\n\n${tvPlan2.text}\n\n${tvPlan3.text}"
+            historyStorage.saveHistory(HistoryItem(planPrompt, fallback, "Study Plan"))
         })
 
         btnBack.setOnClickListener {

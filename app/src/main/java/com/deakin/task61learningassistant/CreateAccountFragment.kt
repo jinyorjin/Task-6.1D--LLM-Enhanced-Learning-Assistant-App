@@ -1,5 +1,6 @@
 package com.deakin.task61learningassistant
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -26,6 +27,9 @@ class CreateAccountFragment : Fragment(R.layout.fragment_create_account) {
             if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(requireContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show()
             } else {
+                val prefs = requireContext().getSharedPreferences("user_profile", Context.MODE_PRIVATE)
+                prefs.edit().putString("username", name).apply()
+
                 val bundle = Bundle().apply {
                     putString("userName", name)
                     putString("userEmail", email)

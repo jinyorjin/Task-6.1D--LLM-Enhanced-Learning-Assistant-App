@@ -50,7 +50,8 @@ class QuizFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_quiz, container, false)
 
         val prefs = requireActivity().getSharedPreferences("user_profile", Context.MODE_PRIVATE)
-        val interest = prefs.getString("interest", "Algorithms") ?: "Algorithms"
+        val username = prefs.getString("username", "")?.trim().orEmpty()
+        val interest = prefs.getString("interest_$username", "Algorithms") ?: "Algorithms"
 
         val tvQuestion = view.findViewById<TextView>(R.id.tvQuestion)
         val etAnswer = view.findViewById<EditText>(R.id.etAnswer)
@@ -58,6 +59,7 @@ class QuizFragment : Fragment() {
         val btnHint = view.findViewById<Button>(R.id.btnHint)
         val tvResult = view.findViewById<TextView>(R.id.tvResult)
         val progressBar = view.findViewById<ProgressBar>(R.id.progressBar)
+        val historyStorage = HistoryStorage(requireContext())
 
         // 1. Personalization)
         val questions = when (interest) {
@@ -109,17 +111,23 @@ class QuizFragment : Fragment() {
 
             val promptText = "The student is studying $interest. For the question '$questionText', the student answered '$userAnswer'. " +
                     "Briefly explain why this is ${if (isCorrect) "correct" else "incorrect"} like a helpful tutor."
+            fun handleFallbackResult(fallbackText: String) {
+                historyStorage.saveHistory(HistoryItem(promptText, fallbackText, "Quiz Feedback"))
+                navigateToResults(isCorrect, userAnswer, promptText, fallbackText)
+            }
 
             progressBar.visibility = View.VISIBLE
             tvResult.text = "AI is analyzing your answer..."
 
             callGemini(promptText, { result ->
                 //  AI sucess
+                historyStorage.saveHistory(HistoryItem(promptText, result, "Quiz Feedback"))
                 navigateToResults(isCorrect, userAnswer, promptText, result)
             }, {
                 //  AI failed Fake AI
                 val fakeAiResponse = if (isCorrect) fallbackExplanations["correct"] else fallbackExplanations["incorrect"]
-                navigateToResults(isCorrect, userAnswer, promptText, "[Offline Mode] $fakeAiResponse")
+                val fallback = "[Offline Mode] ${fakeAiResponse ?: "Please review the core concept and try again."}"
+                handleFallbackResult(fallback)
             })
         }
 
@@ -132,11 +140,14 @@ class QuizFragment : Fragment() {
                 //  AI suceess
                 progressBar.visibility = View.GONE
                 tvResult.text = "✨ AI Hint: $result"
+                historyStorage.saveHistory(HistoryItem(prompt, result, "Quiz Hint"))
             }, {
                 // AI failed Fake Hint
                 progressBar.visibility = View.GONE
                 val fakeHint = fallbackHints[interest] ?: "Think about the core concepts of $interest!"
-                tvResult.text = "💡 Fake Hint: $fakeHint"
+                val fallback = "💡 Fake Hint: $fakeHint"
+                tvResult.text = fallback
+                historyStorage.saveHistory(HistoryItem(prompt, fallback, "Quiz Hint"))
             })
         }
 

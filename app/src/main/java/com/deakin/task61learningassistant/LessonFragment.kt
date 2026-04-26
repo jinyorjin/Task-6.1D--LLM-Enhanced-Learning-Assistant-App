@@ -40,11 +40,13 @@ class LessonFragment : Fragment() {
 
         // Get user's selected interest from saved profile
         val prefs = requireActivity().getSharedPreferences("user_profile", Context.MODE_PRIVATE)
-        val interest = prefs.getString("interest", "Algorithms") ?: "Algorithms"
+        val username = prefs.getString("username", "")?.trim().orEmpty()
+        val interest = prefs.getString("interest_$username", "Algorithms") ?: "Algorithms"
 
         val tvLesson = view.findViewById<TextView>(R.id.tvLessonContent)
         val tvAiResponse = view.findViewById<TextView>(R.id.tvAiResponse)
         val progressBar = view.findViewById<ProgressBar>(R.id.progressBarLesson)
+        val historyStorage = HistoryStorage(requireContext())
 
         val btnSummary = view.findViewById<Button>(R.id.btnSummary)
         val btnHint = view.findViewById<Button>(R.id.btnHint)
@@ -65,9 +67,12 @@ class LessonFragment : Fragment() {
             callGemini(prompt, { result ->
                 progressBar.visibility = View.GONE
                 tvAiResponse.text = "AI Summary: $result"
+                historyStorage.saveHistory(HistoryItem(prompt, result, "Lesson Summary"))
             }, {
                 progressBar.visibility = View.GONE
-                tvAiResponse.text = "[Offline Mode] Summary: A basic overview of $interest."
+                val fallback = "[Offline Mode] Summary: A basic overview of $interest."
+                tvAiResponse.text = fallback
+                historyStorage.saveHistory(HistoryItem(prompt, fallback, "Lesson Summary"))
             })
         }
 
@@ -81,9 +86,12 @@ class LessonFragment : Fragment() {
             callGemini(prompt, { result ->
                 progressBar.visibility = View.GONE
                 tvAiResponse.text = "AI Hint: $result"
+                historyStorage.saveHistory(HistoryItem(prompt, result, "Lesson Hint"))
             }, {
                 progressBar.visibility = View.GONE
-                tvAiResponse.text = "[Offline Mode] Hint: Focus on the key concepts and try simple examples."
+                val fallback = "[Offline Mode] Hint: Focus on the key concepts and try simple examples."
+                tvAiResponse.text = fallback
+                historyStorage.saveHistory(HistoryItem(prompt, fallback, "Lesson Hint"))
             })
         }
 
@@ -97,9 +105,12 @@ class LessonFragment : Fragment() {
             callGemini(prompt, { result ->
                 progressBar.visibility = View.GONE
                 tvAiResponse.text = "AI Explanation: $result"
+                historyStorage.saveHistory(HistoryItem(prompt, result, "Lesson Explanation"))
             }, {
                 progressBar.visibility = View.GONE
-                tvAiResponse.text = "[Offline Mode] Explanation: $interest helps developers solve problems more efficiently."
+                val fallback = "[Offline Mode] Explanation: $interest helps developers solve problems more efficiently."
+                tvAiResponse.text = fallback
+                historyStorage.saveHistory(HistoryItem(prompt, fallback, "Lesson Explanation"))
             })
         }
 
